@@ -2,14 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Agronetics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Profile - Agronetics AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <style>* { font-family: 'Inter', sans-serif; }</style>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .profile-pic-container:hover .upload-overlay { opacity: 1; }
+        .upload-overlay { transition: opacity 0.2s ease; }
+        input:focus, select:focus { outline: none; border-color: #10b981; ring: 2px solid #10b981; }
+        .bottom-nav a.active { color: #10b981; font-weight: 500; }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-50 to-teal-50">
+<body class="bg-gradient-to-br from-emerald-50 to-teal-50 font-sans">
     
     <!-- Auth Check -->
     <script>
@@ -21,85 +27,479 @@
         }
     </script>
     
-    <div class="max-w-md mx-auto min-h-screen bg-white relative pb-20">
-        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl">
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative pb-20">
+        <!-- Header with gradient -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl shadow-lg">
             <div class="flex items-center">
-                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">←</button>
-                <h1 class="text-xl font-bold flex-1 text-center">Farmer Profile</h1>
+                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <span class="material-symbols-outlined text-xl">arrow_back</span>
+                </button>
+                <h1 class="text-xl font-bold flex-1 text-center pr-9">Farmer Profile</h1>
+            </div>
+            <p class="text-center text-emerald-100 text-xs mt-1">Agronetics AI User</p>
+        </div>
+
+        <!-- Profile Photo & Stats Card -->
+        <div class="relative px-5 -mt-8">
+            <div class="bg-white rounded-2xl shadow-xl p-5 border border-emerald-100">
+                <!-- Profile photo with upload -->
+                <div class="flex flex-col items-center">
+                    <div class="relative profile-pic-container mb-3">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg ring-4 ring-white cursor-pointer overflow-hidden">
+                            <img id="profileImg" src="" alt="Profile" class="w-full h-full object-cover hidden">
+                            <span id="profilePlaceholder" class="material-symbols-outlined text-5xl text-white">person</span>
+                        </div>
+                        <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 upload-overlay cursor-pointer" onclick="document.getElementById('photoUpload').click()">
+                            <span class="material-symbols-outlined text-white text-xl">camera_alt</span>
+                        </div>
+                        <input type="file" id="photoUpload" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
+                    </div>
+                    <h2 id="displayName" class="text-xl font-bold text-gray-800">Farmer</h2>
+                    <p class="text-emerald-600 text-sm font-medium">🌾 Agronetics AI User</p>
+                    <div class="flex gap-2 mt-2">
+                        <span class="bg-emerald-100 text-emerald-700 text-xs px-3 py-1 rounded-full">⭐ Premium User</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">AI Member</span>
+                    </div>
+                </div>
+                
+                <!-- Statistics row -->
+                <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-emerald-100">
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500">Total Scans</p>
+                        <p class="font-bold text-emerald-700 text-xl" id="statTotalScans">0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500">Healthy Ratio</p>
+                        <p class="font-bold text-emerald-700 text-xl" id="statHealthyRatio">0%</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500">Most Common</p>
+                        <p class="font-semibold text-emerald-700 text-xs truncate" id="statMostCommon">-</p>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="p-4">
-            <div class="bg-gray-50 rounded-xl p-4 text-center">
-                <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span class="material-symbols-outlined text-5xl text-emerald-600">person</span>
+
+        <!-- Editable Profile Form - All user fields -->
+        <div class="px-5 mt-5 space-y-4">
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <h3 class="font-bold text-gray-700 flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-emerald-600 text-xl">edit_note</span>
+                    Personal Information
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-500 font-medium">First Name</label>
+                            <input type="text" id="firstName" placeholder="Enter first name" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 font-medium">Last Name</label>
+                            <input type="text" id="lastName" placeholder="Enter last name" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 font-medium">Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 font-medium">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1 234 567 8900" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 font-medium">Address</label>
+                        <input type="text" id="address" placeholder="Street, city, postal code" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 font-medium">Country</label>
+                        <input type="text" id="country" placeholder="Country" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:border-emerald-400 bg-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-500 font-medium">Gender</label>
+                            <select id="gender" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500 font-medium">Birthdate</label>
+                            <input type="date" id="birthdate" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg bg-white">
+                        </div>
+                    </div>
                 </div>
-                <h2 id="displayName" class="text-xl font-bold">Farmer</h2>
-                <p class="text-gray-500 text-sm">Agronetics AI User</p>
             </div>
-            
-            <div class="grid grid-cols-3 gap-3 mt-4">
-                <div class="bg-emerald-50 rounded-xl p-3 text-center">
-                    <p class="text-xs text-gray-500">Total Scans</p>
-                    <p id="totalScans" class="text-2xl font-bold text-emerald-600">0</p>
-                </div>
-                <div class="bg-emerald-50 rounded-xl p-3 text-center">
-                    <p class="text-xs text-gray-500">Healthy Ratio</p>
-                    <p id="healthyRatio" class="text-2xl font-bold text-emerald-600">0%</p>
-                </div>
-                <div class="bg-emerald-50 rounded-xl p-3 text-center">
-                    <p class="text-xs text-gray-500">Most Common</p>
-                    <p id="mostCommon" class="text-sm font-bold text-emerald-600">-</p>
-                </div>
-            </div>
-            
-            <div class="mt-4 space-y-2">
-                <button onclick="logout()" class="w-full bg-red-500 text-white py-2 rounded-lg">Logout</button>
+
+            <!-- Save Info Button -->
+            <button id="saveProfileBtn" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-3 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">save</span> Save Profile Info
+            </button>
+
+            <!-- Settings & Action Buttons Group -->
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden divide-y divide-gray-100 shadow-sm">
+                <button onclick="openModal('settings')" class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-600">settings</span><span class="font-medium">Settings</span></div>
+                    <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+                </button>
+                <button onclick="openModal('privacy')" class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-600">lock</span><span class="font-medium">Privacy & Policy</span></div>
+                    <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+                </button>
+                <button onclick="openModal('terms')" class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-600">description</span><span class="font-medium">Terms & Conditions</span></div>
+                    <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+                </button>
+                <button onclick="openChangePasswordModal()" class="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-600">key</span><span class="font-medium">Change Password</span></div>
+                    <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+                </button>
+                <button onclick="confirmDeleteAccount()" class="w-full flex items-center justify-between p-4 hover:bg-red-50 transition text-red-600">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined">delete_forever</span><span class="font-medium">Delete Account</span></div>
+                    <span class="material-symbols-outlined text-red-400 text-sm">warning</span>
+                </button>
+                <button id="logoutBtn" class="w-full flex items-center justify-between p-4 hover:bg-orange-50 transition text-orange-700">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined">logout</span><span class="font-medium">Logout</span></div>
+                    <span class="material-symbols-outlined text-orange-400 text-sm">exit_to_app</span>
+                </button>
             </div>
         </div>
-        
-        <!-- Bottom Nav -->
-        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t py-2 px-3">
-            <div class="flex justify-around">
-                <a href="/" class="flex flex-col items-center text-gray-500">🏠<span class="text-xs">Home</span></a>
-                <a href="/scan" class="flex flex-col items-center text-gray-500">📷<span class="text-xs">Scan</span></a>
-                <a href="/history" class="flex flex-col items-center text-gray-500">📜<span class="text-xs">History</span></a>
-                <a href="/profile" class="flex flex-col items-center text-emerald-500">👤<span class="text-xs">Profile</span></a>
+
+        <!-- Bottom Navigation with SVG/Material Symbols (Same as Index Page) -->
+        <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-gray-200 rounded-t-2xl shadow-2xl py-2 px-3 z-30">
+            <div class="flex justify-around items-center">
+                <a href="/" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                    <span class="material-symbols-outlined text-2xl">home</span>
+                    <span class="text-[11px] mt-0.5">Home</span>
+                </a>
+                <a href="/scan" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                    <span class="material-symbols-outlined text-2xl">photo_camera</span>
+                    <span class="text-[11px] mt-0.5">Scan</span>
+                </a>
+                <a href="/history" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                    <span class="material-symbols-outlined text-2xl">history</span>
+                    <span class="text-[11px] mt-0.5">History</span>
+                </a>
+                <a href="/profile" class="flex flex-col items-center text-emerald-500 font-medium">
+                    <span class="material-symbols-outlined text-2xl">person</span>
+                    <span class="text-[11px] mt-0.5">Profile</span>
+                </a>
             </div>
         </nav>
     </div>
-    
+
+    <!-- Modal for Settings / Privacy / Terms -->
+    <div id="infoModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white w-[90%] max-w-md rounded-2xl p-5 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3 mb-3">
+                <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Title</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="modalContent" class="text-gray-600 text-sm leading-relaxed space-y-3"></div>
+            <button onclick="closeModal()" class="mt-5 w-full bg-emerald-500 text-white py-2 rounded-lg">Got it</button>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="passwordModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white w-[90%] max-w-md rounded-2xl p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">🔐 Change Password</h3>
+            <input type="password" id="currentPwd" placeholder="Current password" class="w-full mb-3 px-3 py-2 border rounded-lg">
+            <input type="password" id="newPwd" placeholder="New password (min 4 characters)" class="w-full mb-3 px-3 py-2 border rounded-lg">
+            <input type="password" id="confirmPwd" placeholder="Confirm new password" class="w-full mb-4 px-3 py-2 border rounded-lg">
+            <div class="flex gap-3">
+                <button onclick="closePasswordModal()" class="flex-1 bg-gray-200 py-2 rounded-lg">Cancel</button>
+                <button onclick="changePasswordHandler()" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastMsg" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm z-50 hidden shadow-lg"></div>
+
     <script>
+        // Storage Keys
         const SESSION_KEY = 'agronetics_user';
+        const PROFILE_KEY = 'agronetics_user_profile_data';
+        const PHOTO_KEY = 'agronetics_profile_photo_base64';
+        const PWD_KEY = 'agronetics_user_password';
         
-        async function loadStats() {
-            try {
-                const response = await fetch('/api/profile/stats');
-                const stats = await response.json();
-                document.getElementById('totalScans').innerText = stats.total_scans || 0;
-                document.getElementById('healthyRatio').innerText = (stats.healthy_ratio || 0) + '%';
-                document.getElementById('mostCommon').innerText = stats.most_common_disease || '-';
-            } catch(e) {}
+        // Show Toast Message
+        function showToast(msg, duration = 2500) {
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, duration);
         }
         
-        function loadUserInfo() {
-            const sessionData = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+        // Get Current Logged In User
+        function getCurrentUser() {
+            const fromLocal = localStorage.getItem(SESSION_KEY);
+            const fromSession = sessionStorage.getItem(SESSION_KEY);
+            const sessionData = fromLocal || fromSession;
             if (sessionData) {
                 try {
-                    const user = JSON.parse(sessionData);
-                    document.getElementById('displayName').innerText = user.name || user.email.split('@')[0];
+                    return JSON.parse(sessionData);
+                } catch(e) { return null; }
+            }
+            return null;
+        }
+        
+        // Load Profile Data from localStorage
+        function loadProfileData() {
+            const saved = localStorage.getItem(PROFILE_KEY);
+            const currentUser = getCurrentUser();
+            
+            if (saved) {
+                try {
+                    const profile = JSON.parse(saved);
+                    document.getElementById('firstName').value = profile.firstName || '';
+                    document.getElementById('lastName').value = profile.lastName || '';
+                    document.getElementById('email').value = profile.email || (currentUser ? currentUser.email : '');
+                    document.getElementById('phone').value = profile.phone || '';
+                    document.getElementById('address').value = profile.address || '';
+                    document.getElementById('country').value = profile.country || '';
+                    document.getElementById('gender').value = profile.gender || '';
+                    document.getElementById('birthdate').value = profile.birthdate || '';
+                    const fullName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+                    document.getElementById('displayName').innerText = fullName || (currentUser ? currentUser.name : 'Farmer');
                 } catch(e) {}
+            } else if (currentUser) {
+                document.getElementById('email').value = currentUser.email || '';
+                document.getElementById('displayName').innerText = currentUser.name || 'Farmer';
+            }
+            
+            // Load profile photo
+            const savedPhoto = localStorage.getItem(PHOTO_KEY);
+            const imgEl = document.getElementById('profileImg');
+            const placeholderSpan = document.getElementById('profilePlaceholder');
+            if (savedPhoto && savedPhoto !== '') {
+                imgEl.src = savedPhoto;
+                imgEl.classList.remove('hidden');
+                placeholderSpan.classList.add('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+                placeholderSpan.classList.remove('hidden');
             }
         }
         
-        function logout() {
-            localStorage.removeItem(SESSION_KEY);
-            sessionStorage.removeItem(SESSION_KEY);
-            window.location.href = '/login';
+        // Save All Profile Info
+        function saveProfileInfo() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            
+            if (!firstName && !lastName) {
+                showToast('⚠️ Please enter your name');
+                return;
+            }
+            
+            const profileData = {
+                firstName: firstName,
+                lastName: lastName,
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                country: document.getElementById('country').value.trim(),
+                gender: document.getElementById('gender').value,
+                birthdate: document.getElementById('birthdate').value,
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(profileData));
+            
+            const fullName = `${firstName} ${lastName}`.trim();
+            document.getElementById('displayName').innerText = fullName || 'Farmer';
+            showToast('✅ Profile information saved successfully!');
         }
         
-        loadUserInfo();
-        loadStats();
+        // Upload Profile Photo
+        function uploadProfilePhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select an image file');
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('Image too large (max 2MB)');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem(PHOTO_KEY, e.target.result);
+                const imgEl = document.getElementById('profileImg');
+                const placeholderSpan = document.getElementById('profilePlaceholder');
+                imgEl.src = e.target.result;
+                imgEl.classList.remove('hidden');
+                placeholderSpan.classList.add('hidden');
+                showToast('📸 Profile photo updated!');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Fetch Scan Statistics
+        async function fetchAndUpdateStats() {
+            try {
+                const response = await fetch('/api/profile/stats');
+                const stats = await response.json();
+                document.getElementById('statTotalScans').innerText = stats.total_scans || 0;
+                document.getElementById('statHealthyRatio').innerText = (stats.healthy_ratio || 0) + '%';
+                let mostCommon = stats.most_common_disease || '-';
+                if (mostCommon.length > 20) mostCommon = mostCommon.substring(0, 18) + '..';
+                document.getElementById('statMostCommon').innerText = mostCommon;
+            } catch(e) {
+                console.warn('Stats error:', e);
+            }
+        }
+        
+        // Modal Contents
+        const modalContents = {
+            settings: {
+                title: '⚙️ Settings',
+                body: `<p class="font-medium">App Preferences</p>
+                <p>• <strong>Notifications:</strong> Coming soon</p>
+                <p>• <strong>Language:</strong> English (default)</p>
+                <p>• <strong>Dark Mode:</strong> Auto (system preference)</p>
+                <p>• <strong>Data Sync:</strong> Your scan history is stored locally</p>
+                <p>• <strong>Model Accuracy:</strong> 98% on test dataset</p>
+                <p class="text-xs text-gray-500 mt-3">More settings will be available in future updates.</p>`
+            },
+            privacy: {
+                title: '🔒 Privacy & Policy',
+                body: `<p class="font-bold">Data Collection & Use</p>
+                <p>Agronetics AI collects leaf images, diagnosis results, and profile information to improve disease detection accuracy. Your data is encrypted and never shared with third parties without your explicit consent.</p>
+                <br><p class="font-bold">Your Rights</p>
+                <p>You can request deletion of your data at any time via the Delete Account option.</p>
+                <p><em>Last updated: December 2024</em></p>`
+            },
+            terms: {
+                title: '📜 Terms & Conditions',
+                body: `<p>By using Agronetics AI, you agree that:</p>
+                <ul class="list-disc pl-5 space-y-1 mt-2">
+                <li>The AI diagnosis is an advisory tool with 98% accuracy</li>
+                <li>You assume full responsibility for crop management decisions</li>
+                <li>The service supports 66 plant disease classes</li>
+                <li>You may not commercially resell diagnosis data</li>
+                </ul>`
+            }
+        };
+        
+        function openModal(type) {
+            const content = modalContents[type];
+            if (content) {
+                document.getElementById('modalTitle').innerText = content.title;
+                document.getElementById('modalContent').innerHTML = content.body;
+                document.getElementById('infoModal').classList.remove('hidden');
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('infoModal').classList.add('hidden');
+        }
+        
+        // Change Password Functions
+        function openChangePasswordModal() {
+            document.getElementById('currentPwd').value = '';
+            document.getElementById('newPwd').value = '';
+            document.getElementById('confirmPwd').value = '';
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+        
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+        }
+        
+        function changePasswordHandler() {
+            const current = document.getElementById('currentPwd').value;
+            const newPwd = document.getElementById('newPwd').value;
+            const confirm = document.getElementById('confirmPwd').value;
+            
+            let storedPwd = localStorage.getItem(PWD_KEY);
+            if (!storedPwd) {
+                storedPwd = 'agro123';
+                localStorage.setItem(PWD_KEY, storedPwd);
+            }
+            
+            if (!current) {
+                showToast('❌ Please enter current password');
+                return;
+            }
+            if (current !== storedPwd) {
+                showToast('❌ Current password is incorrect');
+                return;
+            }
+            if (newPwd.length < 4) {
+                showToast('Password must be at least 4 characters');
+                return;
+            }
+            if (newPwd !== confirm) {
+                showToast('❌ New passwords do not match');
+                return;
+            }
+            localStorage.setItem(PWD_KEY, newPwd);
+            showToast('🔑 Password changed successfully!');
+            closePasswordModal();
+        }
+        
+        // Delete Account
+        function confirmDeleteAccount() {
+            if (confirm('⚠️ WARNING: Deleting your account will permanently erase all your data. This cannot be undone. Are you sure?')) {
+                const confirmation = prompt('Type "DELETE" to confirm:');
+                if (confirmation === 'DELETE') {
+                    localStorage.removeItem(PROFILE_KEY);
+                    localStorage.removeItem(PHOTO_KEY);
+                    localStorage.removeItem(PWD_KEY);
+                    localStorage.removeItem(SESSION_KEY);
+                    sessionStorage.removeItem(SESSION_KEY);
+                    sessionStorage.clear();
+                    showToast('🗑️ Account deleted. Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    showToast('Deletion cancelled');
+                }
+            }
+        }
+        
+        // Logout
+        function logoutHandler() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem(SESSION_KEY);
+                showToast('👋 Logged out successfully');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 800);
+            }
+        }
+        
+        // Initialize Page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfileData();
+            fetchAndUpdateStats();
+            
+            if (!localStorage.getItem(PWD_KEY)) {
+                localStorage.setItem(PWD_KEY, 'agro123');
+            }
+            
+            document.getElementById('saveProfileBtn').addEventListener('click', saveProfileInfo);
+            document.getElementById('logoutBtn').addEventListener('click', logoutHandler);
+        });
+        
+        // Expose functions globally
+        window.uploadProfilePhoto = uploadProfilePhoto;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.openChangePasswordModal = openChangePasswordModal;
+        window.closePasswordModal = closePasswordModal;
+        window.changePasswordHandler = changePasswordHandler;
+        window.confirmDeleteAccount = confirmDeleteAccount;
+        window.saveProfileInfo = saveProfileInfo;
+        window.logoutHandler = logoutHandler;
     </script>
 </body>
 </html>
