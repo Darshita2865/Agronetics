@@ -1,0 +1,67 @@
+Disease,Deficiency,Advice,Warning
+Apple___Apple_scab,Potassium,"Apply potassium-rich fertilizer, improve airflow",Reduced fruit quality and yield
+Apple___Black_rot,Potassium,"Prune infected parts, add potash",Fruit rot may spread rapidly
+Apple___Cedar_apple_rust,Potassium,Use balanced NPK fertilizer,Severe leaf drop possible
+Apple___healthy,No deficiency,Maintain regular nutrition,Poor care may invite disease
+Cauliflower_Black_Rot,Phosphorus,"Improve soil drainage, add phosphorus",Crop failure risk
+Cauliflower_Healthy,No deficiency,Continue balanced fertilization,Nutrient imbalance may occur
+Cherry_Powdery_mildew,Potassium,"Spray fungicide, increase potassium",Reduced photosynthesis
+Cherry_healthy,No deficiency,Maintain soil health,Future disease susceptibility
+Corn_Cercospora_leaf_spot,Potassium,"Apply potash, rotate crops",Yield loss
+Corn_Common_rust,Potassium,"Use resistant varieties, fertilize properly",Weak plants
+Corn_Northern_Leaf_Blight,Potassium,"Balanced fertilization, fungicide",Stunted growth
+Corn_healthy,No deficiency,Monitor regularly,Stress can cause infection
+Cotton_Aphids,Nitrogen,"Apply nitrogen carefully, control pests",Heavy infestation
+Cotton_Bacterial_Blight,Phosphorus,"Improve soil nutrition, use clean seeds",Plant death
+Cotton_Healthy,No deficiency,Continue best practices,Yield decline if neglected
+Cotton_Powdery_Mildew,Potassium,"Increase potassium, spray fungicide",Poor boll development
+Cotton_Target_spot,Potassium,"Balanced nutrients, disease monitoring",Leaf damage
+Grape_Black_rot,Potassium,"Prune vines, add potash",Fruit spoilage
+Grape_Esca,Potassium,"Improve vine nutrition, remove infected vines",Vine death
+Grape_Leaf_blight,Potassium,"Potassium application, fungicide",Yield reduction
+Grape_healthy,No deficiency,Maintain vineyard hygiene,Disease outbreak risk
+Jackfruit_Algal_Leaf_Spot,Potassium,Improve potassium and drainage,Leaf damage
+Jackfruit_Black_Spot,Potassium,"Use fungicide, balanced nutrition",Fruit loss
+Jackfruit_Healthy,No deficiency,Continue good care,Future stress issues
+Mango_Anthracnose,Potassium,"Spray fungicide, add potassium",Fruit rot
+Mango_Bacterial_Canker,Phosphorus,"Apply phosphorus, prune affected parts",Tree weakening
+Mango_Cutting_Weevil,Nitrogen,"Improve nitrogen, pest control",Severe yield loss
+Mango_Die_Back,Potassium,Improve soil fertility,Branch death
+Mango_Gall_Midge,Nitrogen,"Nitrogen management, pest control",Flower damage
+Mango_Healthy,No deficiency,Maintain nutrition,Disease vulnerability
+Mango_Powdery_Mildew,Potassium,"Potassium fertilizer, fungicide",Reduced flowering
+Mango_Sooty_Mould,Potassium,"Control insects, improve nutrition",Photosynthesis blocked
+Peach_Bacterial_spot,Phosphorus,"Improve phosphorus, sanitation",Fruit blemishes
+Peach_healthy,No deficiency,Balanced fertilization,Reduced future yield
+Pepper_Bacterial_spot,Phosphorus,"Improve phosphorus, avoid overhead watering",Crop loss
+Pepper_healthy,No deficiency,Maintain soil nutrients,Disease risk
+Potato_Early_blight,Potassium,"Add potassium, crop rotation",Tuber damage
+Potato_Late_blight,Potassium,"Fungicide, balanced nutrition",Total crop loss
+Potato_healthy,No deficiency,Regular monitoring,Sudden disease attack
+Pumpkin_Bacterial_Leaf_Spot,Phosphorus,"Improve phosphorus, avoid wet leaves",Leaf damage
+Pumpkin_Downy_Mildew,Potassium,"Potassium fertilizer, fungicide",Plant collapse
+Pumpkin_Healthy,No deficiency,Continue care,Stress-induced disease
+Pumpkin_Mosaic_Disease,Zinc,"Apply zinc, remove infected plants",Virus spread
+Pumpkin_Powdery_Mildew,Potassium,Increase potassium,Yield reduction
+Rice_BrownSpot,Potassium,"Apply potash, improve soil health",Grain quality loss
+Rice_Healthy,No deficiency,Maintain nutrients,Lower resistance
+Rice_Hispa,Nitrogen,"Nitrogen management, pest control",Leaf destruction
+Rice_LeafBlast,Potassium,"Potassium fertilizer, resistant varieties",Severe yield loss
+Strawberry_Leaf_scorch,Potassium,Improve potassium nutrition,Leaf burn
+Strawberry_healthy,No deficiency,Maintain irrigation & nutrients,Disease susceptibility
+Sugarcane_Bacterial_Blights,Phosphorus,"Improve phosphorus, sanitation",Cane drying
+Sugarcane_Healthy,No deficiency,Continue best practices,Reduced sugar content
+Sugarcane_Mosaic,Zinc,"Zinc application, remove infected plants",Virus spread
+Sugarcane_RedRot,Potassium,"Improve potassium, destroy infected canes",Field loss
+Sugarcane_Rust,Potassium,Balanced fertilization,Reduced cane growth
+Sugarcane_Yellow,Nitrogen,Nitrogen supplementation,Poor growth
+Tomato_Bacterial_spot,Phosphorus,"Improve phosphorus, disease control",Fruit damage
+Tomato_Early_blight,Potassium,Apply potassium,Leaf loss
+Tomato_Late_blight,Potassium,"Fungicide, proper nutrition",Total crop failure
+Tomato_Leaf_Mold,Potassium,"Improve ventilation, potassium",Reduced yield
+Tomato_Septoria_leaf_spot,Potassium,Potassium fertilizer,Defoliation
+Tomato_Spider_mites,Nitrogen,"Nitrogen balance, pest control",Plant weakening
+Tomato_Target_Spot,Potassium,Balanced nutrition,Fruit spots
+Tomato_Yellow_Leaf_Curl_Virus,Zinc,"Zinc nutrition, remove infected plants",Virus spread
+Tomato_mosaic_virus,Zinc,"Zinc application, sanitation",Stunted growth
+Tomato_healthy,No deficiency,Maintain nutrients & hygiene,Sudden disease onset

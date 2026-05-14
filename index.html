@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Agronetics AI - Plant Disease Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .feature-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+        }
+        .bottom-nav a.active {
+            color: #10b981;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-50">
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative pb-20">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-8 text-white rounded-b-3xl shadow-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight">Agronetics</h1>
+                    <p class="text-emerald-100 text-sm mt-1">AI-Powered Agriculture</p>
+                </div>
+                <div class="bg-white/20 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                    v2.0
+                </div>
+            </div>
+            <p class="mt-4 text-emerald-50 text-sm leading-relaxed">
+                Enhancing precision agriculture with advanced AI. Detect plant diseases early and accurately.
+            </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="px-4 -mt-5">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white rounded-xl p-3 shadow-md border border-emerald-100">
+                    <div class="flex items-center gap-2 text-emerald-600">
+                        <span class="material-symbols-outlined text-2xl">verified</span>
+                        <span class="text-xs font-semibold">AI Accuracy</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-800">98%</p>
+                    <p class="text-xs text-gray-500">on test dataset</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-md border border-emerald-100">
+                    <div class="flex items-center gap-2 text-emerald-600">
+                        <span class="material-symbols-outlined text-2xl">bolt</span>
+                        <span class="text-xs font-semibold">Inference</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-800">0.3s</p>
+                    <p class="text-xs text-gray-500">real-time AI</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="px-4 mt-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-3">✨ Key Features</h2>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="feature-card bg-emerald-50 rounded-xl p-3 text-center cursor-pointer" onclick="startScan()">
+                    <span class="material-symbols-outlined text-emerald-600 text-3xl">search</span>
+                    <p class="text-xs font-medium text-gray-700 mt-1">Early Detection</p>
+                </div>
+                <div class="feature-card bg-emerald-50 rounded-xl p-3 text-center">
+                    <span class="material-symbols-outlined text-emerald-600 text-3xl">speed</span>
+                    <p class="text-xs font-medium text-gray-700 mt-1">0.3s Inference</p>
+                </div>
+                <div class="feature-card bg-emerald-50 rounded-xl p-3 text-center">
+                    <span class="material-symbols-outlined text-emerald-600 text-3xl">analytics</span>
+                    <p class="text-xs font-medium text-gray-700 mt-1">Field Analytics</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Start AI Scan Button -->
+        <div class="px-4 mt-6">
+            <button onclick="startScan()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">photo_camera</span>
+                Start AI Scan
+            </button>
+            <p class="text-center text-xs text-gray-500 mt-3">
+                📄 Instant disease identification · Upload leaf image
+            </p>
+        </div>
+
+        <!-- Welcome Message / User Info -->
+        <div class="px-4 mt-4" id="userWelcomeSection">
+            <div id="loggedInUser" class="hidden bg-emerald-50 rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">account_circle</span>
+                    <span class="text-sm text-gray-700">Welcome, <span id="userName">Farmer</span>!</span>
+                </div>
+                <button onclick="logout()" class="text-xs text-red-500 hover:text-red-600">Logout</button>
+            </div>
+            <div id="loggedOutUser" class="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gray-500">login</span>
+                    <span class="text-sm text-gray-600">Not logged in</span>
+                </div>
+                <a href="/login" class="text-xs text-emerald-600 hover:text-emerald-700">Login</a>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-gray-200 rounded-t-2xl shadow-2xl py-2 px-3 z-30">
+            <div class="flex justify-around items-center">
+                <a href="/" class="flex flex-col items-center text-emerald-500 font-medium">
+                    <span class="material-symbols-outlined text-2xl">home</span>
+                    <span class="text-[11px] mt-0.5">Home</span>
+                </a>
+                <a href="#" onclick="startScan()" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500 cursor-pointer">
+                    <span class="material-symbols-outlined text-2xl">photo_camera</span>
+                    <span class="text-[11px] mt-0.5">Scan</span>
+                </a>
+                <a href="/history" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                    <span class="material-symbols-outlined text-2xl">history</span>
+                    <span class="text-[11px] mt-0.5">History</span>
+                </a>
+                <a href="/profile" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                    <span class="material-symbols-outlined text-2xl">person</span>
+                    <span class="text-[11px] mt-0.5">Profile</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Toast Message -->
+    <div id="toastMsg" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm z-50 hidden shadow-lg"></div>
+
+    <script>
+        // IMPORTANT: Use the SAME key as login.html
+        const SESSION_KEY = 'agronetics_user';
+        
+        function showToast(msg, duration = 2500) {
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, duration);
+        }
+        
+        function getCurrentUser() {
+            // Check both localStorage and sessionStorage
+            const fromLocal = localStorage.getItem(SESSION_KEY);
+            const fromSession = sessionStorage.getItem(SESSION_KEY);
+            const sessionData = fromLocal || fromSession;
+            if (sessionData) {
+                try {
+                    return JSON.parse(sessionData);
+                } catch(e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+        
+        function updateUIBasedOnAuth() {
+            const user = getCurrentUser();
+            const loggedInDiv = document.getElementById('loggedInUser');
+            const loggedOutDiv = document.getElementById('loggedOutUser');
+            const userNameSpan = document.getElementById('userName');
+            
+            if (user && user.loggedIn) {
+                loggedInDiv.classList.remove('hidden');
+                loggedOutDiv.classList.add('hidden');
+                if (userNameSpan) {
+                    userNameSpan.innerText = user.name || (user.email ? user.email.split('@')[0] : 'Farmer');
+                }
+            } else {
+                loggedInDiv.classList.add('hidden');
+                loggedOutDiv.classList.remove('hidden');
+            }
+        }
+        
+        function startScan() {
+            const user = getCurrentUser();
+            if (user && user.loggedIn) {
+                window.location.href = '/scan';
+            } else {
+                sessionStorage.setItem('redirectAfterLogin', '/scan');
+                showToast('🔐 Please login to start scanning');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+            }
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem(SESSION_KEY);
+                showToast('👋 Logged out successfully');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUIBasedOnAuth();
+        });
+        
+        window.startScan = startScan;
+        window.logout = logout;
+    </script>
+</body>
+</html>

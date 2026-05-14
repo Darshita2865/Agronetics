@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Agronetics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>* { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-50">
+    
+    <!-- Auth Check -->
+    <script>
+        const SESSION_KEY = 'agronetics_user';
+        const sessionData = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+        if (!sessionData) {
+            sessionStorage.setItem('redirectAfterLogin', '/profile');
+            window.location.href = '/login';
+        }
+    </script>
+    
+    <div class="max-w-md mx-auto min-h-screen bg-white relative pb-20">
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl">
+            <div class="flex items-center">
+                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">←</button>
+                <h1 class="text-xl font-bold flex-1 text-center">Farmer Profile</h1>
+            </div>
+        </div>
+        
+        <div class="p-4">
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="material-symbols-outlined text-5xl text-emerald-600">person</span>
+                </div>
+                <h2 id="displayName" class="text-xl font-bold">Farmer</h2>
+                <p class="text-gray-500 text-sm">Agronetics AI User</p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-3 mt-4">
+                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                    <p class="text-xs text-gray-500">Total Scans</p>
+                    <p id="totalScans" class="text-2xl font-bold text-emerald-600">0</p>
+                </div>
+                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                    <p class="text-xs text-gray-500">Healthy Ratio</p>
+                    <p id="healthyRatio" class="text-2xl font-bold text-emerald-600">0%</p>
+                </div>
+                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                    <p class="text-xs text-gray-500">Most Common</p>
+                    <p id="mostCommon" class="text-sm font-bold text-emerald-600">-</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 space-y-2">
+                <button onclick="logout()" class="w-full bg-red-500 text-white py-2 rounded-lg">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Bottom Nav -->
+        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t py-2 px-3">
+            <div class="flex justify-around">
+                <a href="/" class="flex flex-col items-center text-gray-500">🏠<span class="text-xs">Home</span></a>
+                <a href="/scan" class="flex flex-col items-center text-gray-500">📷<span class="text-xs">Scan</span></a>
+                <a href="/history" class="flex flex-col items-center text-gray-500">📜<span class="text-xs">History</span></a>
+                <a href="/profile" class="flex flex-col items-center text-emerald-500">👤<span class="text-xs">Profile</span></a>
+            </div>
+        </nav>
+    </div>
+    
+    <script>
+        const SESSION_KEY = 'agronetics_user';
+        
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/profile/stats');
+                const stats = await response.json();
+                document.getElementById('totalScans').innerText = stats.total_scans || 0;
+                document.getElementById('healthyRatio').innerText = (stats.healthy_ratio || 0) + '%';
+                document.getElementById('mostCommon').innerText = stats.most_common_disease || '-';
+            } catch(e) {}
+        }
+        
+        function loadUserInfo() {
+            const sessionData = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+            if (sessionData) {
+                try {
+                    const user = JSON.parse(sessionData);
+                    document.getElementById('displayName').innerText = user.name || user.email.split('@')[0];
+                } catch(e) {}
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+            window.location.href = '/login';
+        }
+        
+        loadUserInfo();
+        loadStats();
+    </script>
+</body>
+</html>

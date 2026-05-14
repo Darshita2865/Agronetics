@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan - Agronetics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #10b981; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-50">
+    
+    <!-- Auth Check -->
+    <script>
+        const SESSION_KEY = 'agronetics_user';
+        const sessionData = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+        if (!sessionData) {
+            sessionStorage.setItem('redirectAfterLogin', '/scan');
+            window.location.href = '/login';
+        }
+    </script>
+    
+    <div class="max-w-md mx-auto min-h-screen bg-white relative pb-20">
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl">
+            <div class="flex items-center">
+                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">←</button>
+                <h1 class="text-xl font-bold flex-1 text-center">Scan Leaf</h1>
+            </div>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex justify-center mt-4">
+                <div id="previewContainer" class="w-64 h-64 rounded-2xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-emerald-300">
+                    <div id="placeholder" class="text-center">
+                        <span class="material-symbols-outlined text-5xl text-emerald-400">crop_free</span>
+                        <p class="text-xs text-gray-500 mt-2">Leaf preview</p>
+                    </div>
+                    <img id="previewImage" class="w-full h-full object-cover rounded-2xl hidden">
+                </div>
+            </div>
+            
+            <div class="mt-6 space-y-3">
+                <input type="file" id="fileInput" accept="image/*" class="hidden">
+                <button onclick="document.getElementById('fileInput').click()" class="w-full bg-emerald-500 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">upload</span> Upload Image
+                </button>
+                <button id="analyzeBtn" onclick="analyzeImage()" class="hidden w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold py-3 rounded-xl">
+                    Analyze Image
+                </button>
+            </div>
+            
+            <div id="loading" class="hidden mt-6 text-center">
+                <div class="spinner"></div>
+                <p class="mt-3 text-emerald-600">AI analyzing...</p>
+            </div>
+        </div>
+        
+        <!-- Bottom Nav -->
+        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t py-2 px-3">
+            <div class="flex justify-around">
+                <a href="/" class="flex flex-col items-center text-gray-500">🏠<span class="text-xs">Home</span></a>
+                <a href="/scan" class="flex flex-col items-center text-emerald-500">📷<span class="text-xs">Scan</span></a>
+                <a href="/history" class="flex flex-col items-center text-gray-500">📜<span class="text-xs">History</span></a>
+                <a href="/profile" class="flex flex-col items-center text-gray-500">👤<span class="text-xs">Profile</span></a>
+            </div>
+        </nav>
+    </div>
+    
+    <script>
+        let selectedFile = null;
+        
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedFile = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('previewImage').classList.remove('hidden');
+                    document.getElementById('placeholder').classList.add('hidden');
+                    document.getElementById('analyzeBtn').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        async function analyzeImage() {
+            if (!selectedFile) return;
+            
+            document.getElementById('analyzeBtn').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            try {
+                const response = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.setItem('lastScanResult', JSON.stringify(data));
+                    window.location.href = '/results';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Connection error');
+            }
+            document.getElementById('loading').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
