@@ -71,19 +71,33 @@ Backend
 | **GitHub** | Version control |
 
 ## 📁 Project Structure
+
 agronetics-ai/
+
 ├── app.py # Main Flask application
+
 ├── requirements.txt # Python dependencies
+
 ├── README.md # Project documentation
+
 ├── .gitignore # Git ignore file
+
 ├── templates/
-│ ├── index.html # Home page
-│ ├── login.html # Login page
-│ ├── scan.html # Camera/upload page
-│ ├── results.html # Diagnosis results
-│ ├── history.html # Scan history
-│ └── profile.html # User profile
+
+├── index.html # Home page
+
+├── login.html # Login page
+
+├── scan.html # Camera/upload page
+
+├── results.html # Diagnosis results
+
+├── history.html # Scan history
+
+└── profile.html # User profile
+
 ├── uploads/ # Temporary upload folder
+
 └── best_cnn.pth # Trained model (optional)
 
 # 🚀 Installation
