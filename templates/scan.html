@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Scan - Agronetics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,6 +11,23 @@
         * { font-family: 'Inter', sans-serif; }
         .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #10b981; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn-camera {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: transform 0.2s;
+        }
+        .btn-camera:hover {
+            transform: scale(1.02);
+        }
+        .btn-gallery {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            transition: transform 0.2s;
+        }
+        .btn-gallery:hover {
+            transform: scale(1.02);
+        }
+        video {
+            transform: scaleX(-1);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 to-teal-50">
@@ -28,46 +45,80 @@
     <div class="max-w-md mx-auto min-h-screen bg-white relative pb-20">
         <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl">
             <div class="flex items-center">
-                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">←</button>
+                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
                 <h1 class="text-xl font-bold flex-1 text-center">Scan Leaf</h1>
+                <div class="w-9"></div>
             </div>
+            <p class="text-center text-emerald-100 text-xs mt-1">Take a photo or upload from gallery</p>
         </div>
         
         <div class="p-4">
-            <div class="flex justify-center mt-4">
-                <div id="previewContainer" class="w-64 h-64 rounded-2xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-emerald-300">
+            <!-- Preview Area -->
+            <div class="flex justify-center mt-2">
+                <div id="previewContainer" class="w-64 h-64 rounded-2xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-emerald-300 overflow-hidden">
                     <div id="placeholder" class="text-center">
                         <span class="material-symbols-outlined text-5xl text-emerald-400">crop_free</span>
                         <p class="text-xs text-gray-500 mt-2">Leaf preview</p>
                     </div>
                     <img id="previewImage" class="w-full h-full object-cover rounded-2xl hidden">
+                    <video id="videoPreview" class="w-full h-full object-cover rounded-2xl hidden" autoplay playsinline></video>
                 </div>
             </div>
             
+            <!-- Upload Options -->
             <div class="mt-6 space-y-3">
-                <input type="file" id="fileInput" accept="image/*" class="hidden">
-                <button onclick="document.getElementById('fileInput').click()" class="w-full bg-emerald-500 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined">upload</span> Upload Image
+                <!-- Camera Button -->
+                <button id="cameraBtn" class="btn-camera w-full text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 shadow-md">
+                    <span class="material-symbols-outlined">camera_alt</span>
+                    Take Photo
                 </button>
-                <button id="analyzeBtn" onclick="analyzeImage()" class="hidden w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold py-3 rounded-xl">
+                
+                <!-- Gallery Upload Button -->
+                <input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden">
+                <button id="galleryBtn" class="btn-gallery w-full text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 shadow-md">
+                    <span class="material-symbols-outlined">folder_open</span>
+                    Choose from Gallery
+                </button>
+                
+                <!-- Analyze Button -->
+                <button id="analyzeBtn" onclick="analyzeImage()" class="hidden w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold py-3 rounded-xl shadow-md flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">analytics</span>
                     Analyze Image
+                </button>
+                
+                <!-- Retake Button -->
+                <button id="retakeBtn" onclick="resetCamera()" class="hidden w-full bg-gray-500 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">refresh</span>
+                    Retake / Choose Another
                 </button>
             </div>
             
+            <!-- Loading Indicator -->
             <div id="loading" class="hidden mt-6 text-center">
                 <div class="spinner"></div>
-                <p class="mt-3 text-emerald-600">AI analyzing...</p>
+                <p class="mt-3 text-emerald-600 font-medium">AI analyzing your plant...</p>
+                <p class="text-xs text-gray-500 mt-1">Detecting diseases and deficiencies</p>
+            </div>
+
+            <!-- Tips -->
+            <div class="mt-6 bg-emerald-50 rounded-xl p-3">
+                <p class="text-xs text-gray-600 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-emerald-500 text-sm">tips_and_updates</span>
+                    <span>💡 Tip: Take photo in good lighting, focus on the affected leaf</span>
+                </p>
             </div>
         </div>
         
-        <!-- Bottom Navigation with SVG/Material Symbols (Same as Index Page) -->
+        <!-- Bottom Navigation -->
         <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-gray-200 rounded-t-2xl shadow-2xl py-2 px-3 z-30">
             <div class="flex justify-around items-center">
                 <a href="/" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">home</span>
                     <span class="text-[11px] mt-0.5">Home</span>
                 </a>
-                <a href="/scan" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/scan" class="flex flex-col items-center text-emerald-500 font-medium">
                     <span class="material-symbols-outlined text-2xl">photo_camera</span>
                     <span class="text-[11px] mt-0.5">Scan</span>
                 </a>
@@ -75,37 +126,213 @@
                     <span class="material-symbols-outlined text-2xl">history</span>
                     <span class="text-[11px] mt-0.5">History</span>
                 </a>
-                <a href="/profile" class="flex flex-col items-center text-emerald-500 font-medium">
+                <a href="/profile" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">person</span>
                     <span class="text-[11px] mt-0.5">Profile</span>
                 </a>
             </div>
         </nav>
     </div>
-    
+
+    <!-- Toast Message -->
+    <div id="toastMsg" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm z-50 hidden shadow-lg"></div>
+
     <script>
         let selectedFile = null;
+        let stream = null;
+        let isCameraMode = false;
         
-        document.getElementById('fileInput').addEventListener('change', function(e) {
+        const cameraBtn = document.getElementById('cameraBtn');
+        const galleryBtn = document.getElementById('galleryBtn');
+        const fileInput = document.getElementById('fileInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
+        const loading = document.getElementById('loading');
+        const previewImage = document.getElementById('previewImage');
+        const videoPreview = document.getElementById('videoPreview');
+        const placeholder = document.getElementById('placeholder');
+        const toastMsg = document.getElementById('toastMsg');
+        
+        function showToast(message, isError = false) {
+            toastMsg.innerText = message;
+            toastMsg.classList.remove('hidden');
+            if (isError) {
+                toastMsg.classList.add('bg-red-500');
+                toastMsg.classList.remove('bg-gray-900');
+            } else {
+                toastMsg.classList.add('bg-gray-900');
+                toastMsg.classList.remove('bg-red-500');
+            }
+            setTimeout(() => {
+                toastMsg.classList.add('hidden');
+            }, 3000);
+        }
+        
+        // Stop camera stream
+        async function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            if (videoPreview.srcObject) {
+                videoPreview.srcObject = null;
+            }
+        }
+        
+        // Start Camera
+        async function startCamera() {
+            try {
+                stopCamera();
+                isCameraMode = true;
+                
+                // Show video preview, hide image preview
+                previewImage.classList.add('hidden');
+                videoPreview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Request camera access
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' }  // Use back camera on phones
+                });
+                videoPreview.srcObject = stream;
+                
+                // Change buttons
+                cameraBtn.classList.add('hidden');
+                galleryBtn.classList.add('hidden');
+                retakeBtn.classList.remove('hidden');
+                
+                // Add capture button dynamically
+                const captureBtn = document.createElement('button');
+                captureBtn.id = 'captureBtn';
+                captureBtn.innerHTML = '<span class="material-symbols-outlined">photo_camera</span> Capture Photo';
+                captureBtn.className = 'w-full bg-red-500 text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 shadow-md mt-3';
+                captureBtn.onclick = capturePhoto;
+                
+                // Remove existing capture button if any
+                const existingCapture = document.getElementById('captureBtn');
+                if (existingCapture) existingCapture.remove();
+                
+                // Add capture button after retake button
+                retakeBtn.parentNode.insertBefore(captureBtn, retakeBtn.nextSibling);
+                
+                showToast('Camera ready! Point at the leaf and tap Capture');
+                
+            } catch (err) {
+                console.error('Camera error:', err);
+                showToast('Cannot access camera. Please check permissions or use gallery upload.', true);
+                resetCamera();
+            }
+        }
+        
+        // Capture photo from camera
+        function capturePhoto() {
+            if (!videoPreview.srcObject) return;
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = videoPreview.videoWidth;
+            canvas.height = videoPreview.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to file
+            canvas.toBlob((blob) => {
+                const timestamp = Date.now();
+                selectedFile = new File([blob], `camera_capture_${timestamp}.jpg`, { type: 'image/jpeg' });
+                
+                // Show captured image
+                previewImage.src = canvas.toDataURL();
+                previewImage.classList.remove('hidden');
+                videoPreview.classList.add('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Stop camera
+                stopCamera();
+                
+                // Show analyze button
+                analyzeBtn.classList.remove('hidden');
+                
+                // Remove capture button
+                const captureBtn = document.getElementById('captureBtn');
+                if (captureBtn) captureBtn.remove();
+                
+                showToast('Photo captured! Click Analyze to diagnose.');
+            }, 'image/jpeg', 0.9);
+        }
+        
+        // Handle gallery upload
+        function setupGalleryUpload() {
+            fileInput.click();
+        }
+        
+        // Handle file selection from gallery
+        fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please select an image file', true);
+                    return;
+                }
+                
+                // Check file size (max 16MB)
+                if (file.size > 16 * 1024 * 1024) {
+                    showToast('File too large! Maximum 16MB', true);
+                    return;
+                }
+                
                 selectedFile = file;
+                isCameraMode = false;
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('previewImage').src = e.target.result;
-                    document.getElementById('previewImage').classList.remove('hidden');
-                    document.getElementById('placeholder').classList.add('hidden');
-                    document.getElementById('analyzeBtn').classList.remove('hidden');
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('hidden');
+                    videoPreview.classList.add('hidden');
+                    placeholder.classList.add('hidden');
+                    analyzeBtn.classList.remove('hidden');
+                    
+                    // Update buttons
+                    cameraBtn.classList.remove('hidden');
+                    galleryBtn.classList.remove('hidden');
+                    retakeBtn.classList.add('hidden');
+                    
+                    // Remove capture button if exists
+                    const captureBtn = document.getElementById('captureBtn');
+                    if (captureBtn) captureBtn.remove();
+                    
+                    showToast('Image loaded! Click Analyze to diagnose.');
                 };
                 reader.readAsDataURL(file);
             }
         });
         
-        async function analyzeImage() {
-            if (!selectedFile) return;
+        // Reset everything
+        function resetCamera() {
+            stopCamera();
+            selectedFile = null;
+            isCameraMode = false;
+            previewImage.classList.add('hidden');
+            videoPreview.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            analyzeBtn.classList.add('hidden');
+            cameraBtn.classList.remove('hidden');
+            galleryBtn.classList.remove('hidden');
+            retakeBtn.classList.add('hidden');
+            fileInput.value = '';
             
-            document.getElementById('analyzeBtn').classList.add('hidden');
-            document.getElementById('loading').classList.remove('hidden');
+            const captureBtn = document.getElementById('captureBtn');
+            if (captureBtn) captureBtn.remove();
+        }
+        
+        // Analyze the image
+        async function analyzeImage() {
+            if (!selectedFile) {
+                showToast('Please select or capture an image first!', true);
+                return;
+            }
+            
+            analyzeBtn.classList.add('hidden');
+            loading.classList.remove('hidden');
             
             const formData = new FormData();
             formData.append('file', selectedFile);
@@ -113,17 +340,34 @@
             try {
                 const response = await fetch('/upload', { method: 'POST', body: formData });
                 const data = await response.json();
+                
                 if (data.success) {
                     localStorage.setItem('lastScanResult', JSON.stringify(data));
-                    window.location.href = '/results';
+                    showToast('Analysis complete! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/results';
+                    }, 500);
                 } else {
-                    alert('Error: ' + data.error);
+                    showToast('Error: ' + data.error, true);
+                    loading.classList.add('hidden');
+                    analyzeBtn.classList.remove('hidden');
                 }
             } catch (error) {
-                alert('Connection error');
+                console.error('Upload error:', error);
+                showToast('Connection error. Please try again.', true);
+                loading.classList.add('hidden');
+                analyzeBtn.classList.remove('hidden');
             }
-            document.getElementById('loading').classList.add('hidden');
         }
+        
+        // Event listeners
+        cameraBtn.addEventListener('click', startCamera);
+        galleryBtn.addEventListener('click', setupGalleryUpload);
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            stopCamera();
+        });
     </script>
 </body>
 </html>
