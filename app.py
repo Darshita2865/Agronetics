@@ -9,14 +9,25 @@ import numpy as np
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from collections import Counter
+import random
 
 app = Flask(__name__)
 app.secret_key = 'agronetics_secret_key_2024'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+
+# FIX: Use /tmp/uploads on Render (writable directory)
+# For local development, it will use local uploads folder
+if os.environ.get('RENDER'):
+    UPLOAD_FOLDER = '/tmp/uploads'
+else:
+    UPLOAD_FOLDER = 'uploads'
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+print(f"✅ Upload folder: {UPLOAD_FOLDER}")
 
 # ==================== 66 PLANT DISEASE CLASSES ====================
 CLASS_NAMES_66 = [
@@ -106,7 +117,6 @@ def predict_image(image_path):
                 confidence = float(top3_probs[0].item())
         else:
             # Mock predictions for demo when model not available
-            import random
             demo_predictions = [
                 'Tomato - Late Blight', 'Tomato - Early Blight', 'Tomato - Healthy',
                 'Potato - Late Blight', 'Grape - Black Rot', 'Apple - Scab'
@@ -198,6 +208,9 @@ def clear_history():
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
+    print(f"📸 Upload request received")
+    print(f"📁 Upload folder: {app.config['UPLOAD_FOLDER']}")
+    
     if 'file' not in request.files:
         return jsonify({'success': False, 'error': 'No file uploaded'}), 400
     
@@ -212,6 +225,7 @@ def upload_image():
         filename = secure_filename(f"{datetime.now().timestamp()}_{file.filename}")
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
+        print(f"✅ File saved: {filepath}")
         
         result = predict_image(filepath)
         
@@ -238,6 +252,7 @@ def upload_image():
         else:
             return jsonify(result), 500
     except Exception as e:
+        print(f"❌ Error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 # ==================== LOAD MODEL ON STARTUP ====================
