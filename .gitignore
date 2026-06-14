@@ -140,3 +140,6 @@ static/dist/
 # Cache
 .cache/
 .cache_*
+
+# Procfile backup
+Procfile.*
