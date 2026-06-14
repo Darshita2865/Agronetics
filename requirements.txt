@@ -1,9 +1,5 @@
-streamlit==1.35.0
-tensorflow==2.15.0
-numpy==1.26.4
-pandas==2.2.2
-scikit-learn==1.4.2
-matplotlib==3.8.4
-pillow==10.3.0
-opencv-python-headless==4.9.0.80
-requests
+flask==2.3.3
+pillow==10.0.0
+werkzeug==2.3.0
+gunicorn==21.2.0
+numpy
