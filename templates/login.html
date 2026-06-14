@@ -7,14 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <style>
-        * { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 to-teal-50">
     <div class="max-w-md mx-auto min-h-screen flex items-center justify-center p-4">
         <div class="w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
-            <!-- Header -->
             <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-8 text-center">
                 <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="material-symbols-outlined text-4xl text-white">agriculture</span>
@@ -23,33 +19,21 @@
                 <p class="text-emerald-100 text-sm mt-1">Plant Disease Detection System</p>
             </div>
             
-            <!-- Login Form -->
             <div class="p-6">
                 <div class="text-center mb-6">
                     <h2 class="text-xl font-bold text-gray-800">Welcome Back!</h2>
                     <p class="text-gray-500 text-sm mt-1">Sign in to continue</p>
                 </div>
 
-                
                 <form id="loginForm">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-medium mb-2">Email Address</label>
-                        <input type="email" id="loginEmail" placeholder="farmer@agronetics.com" 
-                               class="w-full px-3 py-3 border border-gray-200 rounded-xl focus:border-emerald-400 bg-gray-50">
+                        <input type="email" id="loginEmail" placeholder="farmer@agronetics.com" value="farmer@agronetics.com" class="w-full px-3 py-3 border border-gray-200 rounded-xl focus:border-emerald-400 bg-gray-50">
                     </div>
                     
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" 
-                               class="w-full px-3 py-3 border border-gray-200 rounded-xl focus:border-emerald-400 bg-gray-50">
-                    </div>
-                    
-                    <div class="flex items-center justify-between mb-6">
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" id="rememberMe" class="w-4 h-4 text-emerald-500 rounded">
-                            <span class="text-xs text-gray-600">Remember me</span>
-                        </label>
-                        <a href="#" onclick="showForgotPassword()" class="text-xs text-emerald-600">Forgot Password?</a>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" value="agro123" class="w-full px-3 py-3 border border-gray-200 rounded-xl focus:border-emerald-400 bg-gray-50">
                     </div>
                     
                     <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-3 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
@@ -59,40 +43,9 @@
                 </form>
                 
                 <div class="mt-6 text-center">
-                    <p class="text-xs text-gray-500">
-                        Don't have an account? 
-                        <a href="#" onclick="showRegister()" class="text-emerald-600 font-medium">Create Account</a>
-                    </p>
+                    <p class="text-xs text-gray-500">Demo: farmer@agronetics.com / agro123</p>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Register Modal -->
-    <div id="registerModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white w-[90%] max-w-md rounded-2xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Create Account</h3>
-                <button onclick="closeRegister()" class="text-gray-400">&times;</button>
-            </div>
-            <input type="text" id="regName" placeholder="Full Name" class="w-full mb-3 px-3 py-2 border rounded-lg">
-            <input type="email" id="regEmail" placeholder="Email Address" class="w-full mb-3 px-3 py-2 border rounded-lg">
-            <input type="password" id="regPassword" placeholder="Password (min 4 characters)" class="w-full mb-3 px-3 py-2 border rounded-lg">
-            <input type="password" id="regConfirm" placeholder="Confirm Password" class="w-full mb-4 px-3 py-2 border rounded-lg">
-            <button onclick="registerUser()" class="w-full bg-emerald-500 text-white py-2 rounded-lg font-semibold">Register</button>
-        </div>
-    </div>
-    
-    <!-- Forgot Password Modal -->
-    <div id="forgotModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white w-[90%] max-w-md rounded-2xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Reset Password</h3>
-                <button onclick="closeForgot()" class="text-gray-400">&times;</button>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">Enter your email to receive reset instructions.</p>
-            <input type="email" id="forgotEmail" placeholder="Your email address" class="w-full mb-4 px-3 py-2 border rounded-lg">
-            <button onclick="sendResetLink()" class="w-full bg-emerald-500 text-white py-2 rounded-lg font-semibold">Send Reset Link</button>
         </div>
     </div>
     
@@ -109,11 +62,10 @@
             setTimeout(() => toast.classList.add('hidden'), 2500);
         }
         
-        // Initialize default users
         function initUsers() {
             if (!localStorage.getItem(USERS_KEY)) {
                 const defaultUsers = [{
-                    name: 'Farmer John',
+                    name: 'Farmer',
                     email: 'farmer@agronetics.com',
                     password: 'agro123',
                     createdAt: new Date().toISOString()
@@ -122,35 +74,17 @@
             }
         }
         
-        // Login function
         function loginUser(event) {
             event.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
-            if (!email || !password) {
-                showToast('❌ Please enter email and password');
-                return;
-            }
             
             const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
             const user = users.find(u => u.email === email && u.password === password);
             
             if (user) {
-                const sessionData = {
-                    email: user.email,
-                    name: user.name,
-                    loggedIn: true,
-                    loginTime: new Date().toISOString()
-                };
-                
-                if (rememberMe) {
-                    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-                } else {
-                    sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-                }
-                
+                const sessionData = { email: user.email, name: user.name, loggedIn: true, loginTime: new Date().toISOString() };
+                sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
                 showToast('✅ Login successful!');
                 const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || '/';
                 sessionStorage.removeItem('redirectAfterLogin');
@@ -160,59 +94,8 @@
             }
         }
         
-        // Register function
-        function registerUser() {
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            
-            if (!name || !email || !password) {
-                showToast('❌ Please fill all fields');
-                return;
-            }
-            if (password.length < 4) {
-                showToast('❌ Password must be at least 4 characters');
-                return;
-            }
-            if (password !== confirm) {
-                showToast('❌ Passwords do not match');
-                return;
-            }
-            
-            const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-            if (users.find(u => u.email === email)) {
-                showToast('❌ Email already registered');
-                return;
-            }
-            
-            users.push({ name, email, password, createdAt: new Date().toISOString() });
-            localStorage.setItem(USERS_KEY, JSON.stringify(users));
-            showToast('✅ Registration successful! Please login.');
-            closeRegister();
-        }
-        
-        function showRegister() { document.getElementById('registerModal').classList.remove('hidden'); }
-        function closeRegister() { document.getElementById('registerModal').classList.add('hidden'); }
-        function showForgotPassword() { document.getElementById('forgotModal').classList.remove('hidden'); }
-        function closeForgot() { document.getElementById('forgotModal').classList.add('hidden'); }
-        
-        function sendResetLink() {
-            const email = document.getElementById('forgotEmail').value.trim();
-            if (!email) { showToast('❌ Please enter your email'); return; }
-            showToast('📧 Reset link sent (demo: password is agro123)');
-            closeForgot();
-        }
-        
         document.getElementById('loginForm').addEventListener('submit', loginUser);
         initUsers();
-        
-        window.showRegister = showRegister;
-        window.closeRegister = closeRegister;
-        window.registerUser = registerUser;
-        window.showForgotPassword = showForgotPassword;
-        window.closeForgot = closeForgot;
-        window.sendResetLink = sendResetLink;
     </script>
 </body>
 </html>
