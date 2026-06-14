@@ -9,17 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         * { font-family: 'Inter', sans-serif; }
-        .feature-card {
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
-        }
-        .bottom-nav a.active {
-            color: #10b981;
-            font-weight: 500;
-        }
+        .feature-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 to-teal-50">
@@ -31,13 +22,9 @@
                     <h1 class="text-3xl font-bold tracking-tight">Agronetics</h1>
                     <p class="text-emerald-100 text-sm mt-1">AI-Powered Agriculture</p>
                 </div>
-                <div class="bg-white/20 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm">
-                    v2.0
-                </div>
+                <div class="bg-white/20 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm">v2.0</div>
             </div>
-            <p class="mt-4 text-emerald-50 text-sm leading-relaxed">
-                Enhancing precision agriculture with advanced AI. Detect plant diseases early and accurately.
-            </p>
+            <p class="mt-4 text-emerald-50 text-sm leading-relaxed">Enhancing precision agriculture with advanced AI. Detect plant diseases early and accurately.</p>
         </div>
 
         <!-- Stats Cards -->
@@ -81,16 +68,13 @@
             </div>
         </div>
 
-
         <!-- Start AI Scan Button -->
         <div class="px-4 mt-6">
             <button onclick="startScan()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined">photo_camera</span>
                 Start AI Scan
             </button>
-            <p class="text-center text-xs text-gray-500 mt-3">
-                📄 Instant disease identification · Upload leaf image
-            </p>
+            <p class="text-center text-xs text-gray-500 mt-3">📄 Instant disease identification · Upload leaf image</p>
         </div>
 
         <!-- Welcome Message / User Info -->
@@ -118,15 +102,15 @@
                     <span class="material-symbols-outlined text-2xl">home</span>
                     <span class="text-[11px] mt-0.5">Home</span>
                 </a>
-                <a href="#" onclick="startScan()" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500 cursor-pointer">
+                <a href="#" onclick="startScan()" class="flex flex-col items-center text-gray-500 hover:text-emerald-500 cursor-pointer">
                     <span class="material-symbols-outlined text-2xl">photo_camera</span>
                     <span class="text-[11px] mt-0.5">Scan</span>
                 </a>
-                <a href="/history" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/history" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">history</span>
                     <span class="text-[11px] mt-0.5">History</span>
                 </a>
-                <a href="/profile" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/profile" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">person</span>
                     <span class="text-[11px] mt-0.5">Profile</span>
                 </a>
@@ -134,33 +118,24 @@
         </nav>
     </div>
 
-    <!-- Toast Message -->
     <div id="toastMsg" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm z-50 hidden shadow-lg"></div>
 
     <script>
-        // IMPORTANT: Use the SAME key as login.html
         const SESSION_KEY = 'agronetics_user';
         
-        function showToast(msg, duration = 2500) {
+        function showToast(msg) {
             const toast = document.getElementById('toastMsg');
             toast.innerText = msg;
             toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, duration);
+            setTimeout(() => toast.classList.add('hidden'), 2500);
         }
         
         function getCurrentUser() {
-            // Check both localStorage and sessionStorage
             const fromLocal = localStorage.getItem(SESSION_KEY);
             const fromSession = sessionStorage.getItem(SESSION_KEY);
             const sessionData = fromLocal || fromSession;
             if (sessionData) {
-                try {
-                    return JSON.parse(sessionData);
-                } catch(e) {
-                    return null;
-                }
+                try { return JSON.parse(sessionData); } catch(e) { return null; }
             }
             return null;
         }
@@ -174,9 +149,7 @@
             if (user && user.loggedIn) {
                 loggedInDiv.classList.remove('hidden');
                 loggedOutDiv.classList.add('hidden');
-                if (userNameSpan) {
-                    userNameSpan.innerText = user.name || (user.email ? user.email.split('@')[0] : 'Farmer');
-                }
+                if (userNameSpan) userNameSpan.innerText = user.name || (user.email ? user.email.split('@')[0] : 'Farmer');
             } else {
                 loggedInDiv.classList.add('hidden');
                 loggedOutDiv.classList.remove('hidden');
@@ -190,9 +163,7 @@
             } else {
                 sessionStorage.setItem('redirectAfterLogin', '/scan');
                 showToast('🔐 Please login to start scanning');
-                setTimeout(() => {
-                    window.location.href = '/login';
-                }, 1000);
+                setTimeout(() => window.location.href = '/login', 1000);
             }
         }
         
@@ -201,16 +172,11 @@
                 localStorage.removeItem(SESSION_KEY);
                 sessionStorage.removeItem(SESSION_KEY);
                 showToast('👋 Logged out successfully');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 800);
+                setTimeout(() => window.location.reload(), 800);
             }
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            updateUIBasedOnAuth();
-        });
-        
+        document.addEventListener('DOMContentLoaded', updateUIBasedOnAuth);
         window.startScan = startScan;
         window.logout = logout;
     </script>
