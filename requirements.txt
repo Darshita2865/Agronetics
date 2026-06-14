@@ -1,6 +1,5 @@
 flask==2.3.3
-pillow>=10.4.0
-gunicorn==21.2.0
+pillow==10.0.0
+werkzeug==2.3.0
 numpy
-torch
-torchvision
+gunicorn==21.2.0
