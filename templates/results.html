@@ -3,349 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Results - Agronetics AI</title>
+    <title>Results - AgroScan AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         * { font-family: 'Inter', sans-serif; }
-        .bottom-nav a.active {
-            color: #10b981;
-            font-weight: 500;
-        }
         .severity-critical { border-left-color: #dc2626; background-color: #fef2f2; }
+        .severity-high { border-left-color: #f97316; background-color: #fff7ed; }
         .severity-moderate { border-left-color: #f59e0b; background-color: #fffbeb; }
-        .severity-mild { border-left-color: #10b981; background-color: #ecfdf5; }
-        .deficiency-card {
-            transition: transform 0.2s;
-        }
-        .deficiency-card:hover {
-            transform: translateY(-2px);
-        }
+        .severity-good { border-left-color: #10b981; background-color: #ecfdf5; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 to-teal-50">
-    <div class="max-w-md mx-auto min-h-screen bg-white relative pb-24">
+    <div class="max-w-md mx-auto bg-white min-h-screen relative pb-24">
+        
         <!-- Header -->
         <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-5 text-white rounded-b-3xl shadow-lg">
             <div class="flex items-center">
-                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <span class="material-symbols-outlined text-xl">arrow_back</span>
+                <button onclick="window.location.href='/'" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl">home</span>
                 </button>
-                <h1 class="text-xl font-bold flex-1 text-center pr-9">Diagnosis Results</h1>
+                <h1 class="text-xl font-bold flex-1 text-center">Diagnosis Results</h1>
+                <div class="w-9"></div>
             </div>
             <p class="text-center text-emerald-100 text-xs mt-1">AI-powered plant health analysis</p>
         </div>
 
         <!-- Results Content -->
         <div class="p-4" id="resultContent">
-            <!-- Dynamic content loaded here -->
+            <div class="text-center py-10">
+                <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full"></div>
+                <p class="mt-3 text-gray-500">Loading results...</p>
+            </div>
         </div>
 
         <!-- Bottom Navigation -->
         <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-gray-200 rounded-t-2xl shadow-2xl py-2 px-3 z-30">
             <div class="flex justify-around items-center">
-                <a href="/" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">home</span>
-                    <span class="text-[11px] mt-0.5">Home</span>
+                    <span class="text-[11px]">Home</span>
                 </a>
-                <a href="/scan" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/scan" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">photo_camera</span>
-                    <span class="text-[11px] mt-0.5">Scan</span>
+                    <span class="text-[11px]">Scan</span>
                 </a>
-                <a href="/history" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/history" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">history</span>
-                    <span class="text-[11px] mt-0.5">History</span>
+                    <span class="text-[11px]">History</span>
                 </a>
-                <a href="/profile" class="flex flex-col items-center text-gray-500 transition-all hover:text-emerald-500">
+                <a href="/profile" class="flex flex-col items-center text-gray-500 hover:text-emerald-500">
                     <span class="material-symbols-outlined text-2xl">person</span>
-                    <span class="text-[11px] mt-0.5">Profile</span>
+                    <span class="text-[11px]">Profile</span>
                 </a>
             </div>
         </nav>
     </div>
 
     <script>
-        // Complete Disease + Deficiency Database
-        const diseaseDatabase = {
-            // Tomato Diseases
-            'Tomato - Late Blight': {
-                title: 'Tomato Late Blight',
-                icon: 'warning',
-                severity: 'critical',
-                symptoms: '• Dark, water-soaked lesions on leaves and stems\n• White fuzzy fungal growth on leaf undersides\n• Firm, dark, greasy-looking lesions on fruit\n• Rapid browning and collapse of entire plant',
-                cause: 'Caused by the fungus-like oomycete Phytophthora infestans. Spreads rapidly in cool (60-70°F), wet conditions via wind and rain.',
-                treatment: '1. Apply copper-based fungicides immediately\n2. Remove and destroy infected plants (do not compost)\n3. Improve air circulation by pruning\n4. Avoid overhead watering\n5. Use resistant varieties like "Mountain Magic" or "Iron Lady"',
-                prevention: '• Apply preventive fungicides every 7-10 days during wet weather\n• Practice 3-4 year crop rotation\n• Remove volunteer tomato plants\n• Ensure proper plant spacing',
-                organicTreatment: '• Apply copper soap or Bacillus subtilis\n• Use compost tea as foliar spray\n• Remove affected leaves immediately',
-                deficiency: 'Not a nutrient deficiency - this is a fungal disease. However, plants with nitrogen deficiency are more susceptible.',
-                nutrientFix: 'Maintain balanced NPK fertilizer. Avoid excess nitrogen which promotes lush growth susceptible to infection.'
-            },
-            'Tomato - Early Blight': {
-                title: 'Tomato Early Blight',
-                icon: 'warning',
-                severity: 'moderate',
-                symptoms: '• Dark brown spots with concentric rings (target-like appearance)\n• Yellowing around leaf spots\n• Defoliation starting from lower leaves\n• Cankers on stems',
-                cause: 'Caused by the fungus Alternaria solani. Thrives in warm (75-85°F), humid conditions with poor air circulation.',
-                treatment: '1. Apply chlorothalonil or mancozeb fungicides\n2. Remove infected lower leaves\n3. Mulch around plants to prevent soil splash\n4. Water at base, not overhead',
-                prevention: '• Space plants 18-24 inches apart for airflow\n• Use disease-free seeds and transplants\n• Remove crop debris after harvest\n• Rotate crops every 2-3 years',
-                organicTreatment: '• Apply neem oil or copper fungicide\n• Use baking soda solution (1 tbsp per gallon water + few drops soap)\n• Apply compost tea weekly',
-                deficiency: 'May be confused with potassium deficiency. Both cause leaf spotting, but Early Blight has characteristic concentric rings.',
-                nutrientFix: 'Ensure adequate potassium (K) levels. Apply kelp meal or wood ash. Maintain soil pH between 6.2-6.8.'
-            },
-            'Tomato - Healthy': {
-                title: 'Healthy Tomato Plant',
-                icon: 'check_circle',
-                severity: 'mild',
-                symptoms: '• Vibrant green leaves\n• Strong stem growth\n• Healthy flowering and fruit set\n• No visible spots or discoloration',
-                cause: 'No disease detected. Plant is in optimal health.',
-                treatment: 'Continue regular care practices. No treatment needed.',
-                prevention: '• Maintain consistent watering\n• Apply balanced fertilizer monthly\n• Monitor weekly for early signs\n• Practice good garden sanitation',
-                organicTreatment: 'Continue organic practices. Apply compost tea as soil drench for optimal health.',
-                deficiency: 'No nutrient deficiencies detected. Plant appears well-nourished.',
-                nutrientFix: 'Maintain current fertilization schedule. Consider adding compost annually for soil health.'
-            },
-            'Tomato - Septoria Leaf Spot': {
-                title: 'Tomato Septoria Leaf Spot',
-                icon: 'warning',
-                severity: 'moderate',
-                symptoms: '• Small circular spots with dark borders and light centers\n• Spots primarily on lower leaves\n• Leaves turn yellow then brown and drop',
-                cause: 'Caused by fungus Septoria lycopersici. Spreads through rain splash and contaminated soil.',
-                treatment: '1. Apply fungicides containing chlorothalonil\n2. Remove infected leaves immediately\n3. Avoid overhead watering\n4. Use mulch to prevent soil splash',
-                prevention: '• Rotate crops with non-host plants (corn, beans)\n• Remove plant debris in fall\n• Stake plants for better airflow',
-                organicTreatment: '• Apply copper fungicide\n• Use baking soda spray\n• Remove and destroy infected foliage',
-                deficiency: 'Can be mistaken for nitrogen deficiency (yellowing), but Septoria has distinct spots with dark borders.',
-                nutrientFix: 'Maintain balanced nutrition. Apply composted manure. Avoid high nitrogen which promotes lush growth.'
-            },
-            'Tomato - Blossom End Rot': {
-                title: 'Blossom End Rot (Calcium Deficiency)',
-                icon: 'science',
-                severity: 'moderate',
-                symptoms: '• Dark, sunken, leathery spots on bottom of fruit\n• Affects only fruit, not leaves\n• Usually on first fruits of season',
-                cause: 'Calcium deficiency caused by inconsistent watering, not lack of calcium in soil. Fluctuating moisture prevents calcium uptake.',
-                treatment: '1. Maintain consistent soil moisture\n2. Apply calcium nitrate as foliar spray\n3. Mulch heavily to retain moisture\n4. Remove affected fruit',
-                prevention: '• Water deeply and regularly (1-2 inches per week)\n• Add crushed eggshells or gypsum to soil before planting\n• Avoid high nitrogen fertilizers\n• Test soil pH (maintain 6.5-7.0)',
-                organicTreatment: '• Apply crushed eggshells or oyster shell\n• Use calcium-rich compost\n• Apply kelp meal for trace minerals',
-                deficiency: '⚠️ THIS IS A CALCIUM DEFICIENCY! Caused by poor calcium transport due to inconsistent watering.',
-                nutrientFix: 'Calcium deficiency. Add gypsum or lime to soil. Water consistently. Foliar spray with calcium chloride solution (1 tbsp per gallon).'
-            },
-            'Tomato - Yellow Leaf Curl Virus': {
-                title: 'Tomato Yellow Leaf Curl Virus',
-                icon: 'warning',
-                severity: 'critical',
-                symptoms: '• Yellowing and upward curling of leaves\n• Stunted growth\n• Reduced fruit production\n• Flowers drop off',
-                cause: 'Caused by TYLCV, transmitted by whiteflies (Bemisia tabaci). No cure once infected.',
-                treatment: 'Remove and destroy infected plants immediately. Control whitefly populations.',
-                prevention: '• Use virus-resistant varieties\n• Install reflective mulches to deter whiteflies\n• Use row covers early season\n• Control weeds that host whiteflies',
-                organicTreatment: '• Introduce beneficial insects (ladybugs, lacewings)\n• Use yellow sticky traps for whiteflies\n• Apply neem oil to control whiteflies',
-                deficiency: 'Can be confused with nitrogen or magnesium deficiency, but the upward curling is distinctive of virus.',
-                nutrientFix: 'Nutrients won\'t cure virus. Focus on whitefly control and resistant varieties.'
-            },
-            
-            // Potato Diseases
-            'Potato - Late Blight': {
-                title: 'Potato Late Blight',
-                icon: 'warning',
-                severity: 'critical',
-                symptoms: '• Dark, water-soaked lesions on leaves\n• White fungal growth on leaf undersides\n• Rotting tubers with brownish-purple discoloration\n• Plant collapses within days',
-                cause: 'Caused by Phytophthora infestans (same as tomato late blight). Destructive in cool, wet weather.',
-                treatment: '1. Apply fungicides containing chlorothalonil\n2. Destroy infected plants immediately\n3. Store tubers in cool, dry conditions\n4. Do not save seed potatoes from infected crop',
-                prevention: '• Use certified disease-free seed potatoes\n• Hill soil around plants\n• Avoid overhead irrigation\n• Remove volunteer potatoes\n• Plant resistant varieties',
-                organicTreatment: '• Apply copper-based fungicides\n• Remove and destroy infected foliage\n• Use Bordeaux mixture as preventive',
-                deficiency: 'Not a deficiency. This is a highly destructive fungal disease.',
-                nutrientFix: 'Maintain balanced fertility. Avoid excess nitrogen which creates lush growth susceptible to disease.'
-            },
-            
-            // Pepper Diseases
-            'Pepper - Bacterial Spot': {
-                title: 'Bell Pepper Bacterial Spot',
-                icon: 'warning',
-                severity: 'moderate',
-                symptoms: '• Small, water-soaked spots on leaves\n• Spots become brown and angular\n• Raised scabby spots on fruit\n• Defoliation',
-                cause: 'Caused by Xanthomonas bacteria. Spreads through rain splash and contaminated tools.',
-                treatment: '1. Apply copper-based bactericides\n2. Remove infected plants\n3. Avoid working with wet plants\n4. Disinfect tools between plants',
-                prevention: '• Use disease-free seeds\n• Practice 2-3 year crop rotation\n• Avoid overhead watering\n• Remove crop debris',
-                organicTreatment: '• Apply copper fungicide\n• Use Bacillus subtilis\n• Remove infected leaves immediately',
-                deficiency: 'May be confused with magnesium deficiency (interveinal chlorosis), but Bacterial Spot has distinct raised spots.',
-                nutrientFix: 'Maintain balanced nutrition. Epsom salt spray (1 tbsp per gallon) if magnesium deficient.'
-            },
-            
-            // Corn Diseases
-            'Corn - Common Rust': {
-                title: 'Corn Common Rust',
-                icon: 'warning',
-                severity: 'mild',
-                symptoms: '• Small, circular to elongated reddish-brown pustules\n• Pustules on both leaf surfaces\n• Pustules turn black as plant matures',
-                cause: 'Caused by Puccinia sorghi fungus. Spreads by wind-dispersed spores.',
-                treatment: '1. Apply fungicides containing azoxystrobin\n2. Plant resistant hybrids\n3. Early planting to avoid peak disease',
-                prevention: '• Use resistant corn varieties\n• Remove volunteer corn plants\n• Crop rotation',
-                organicTreatment: '• Apply sulfur sprays\n• Use potassium bicarbonate\n• Remove infected leaves',
-                deficiency: 'Can be mistaken for phosphorus deficiency (purple leaves), but rust has distinct raised pustules.',
-                nutrientFix: 'Ensure adequate phosphorus. Apply bone meal or rock phosphate if deficient.'
-            },
-            
-            // Grape Diseases
-            'Grape - Black Rot': {
-                title: 'Grape Black Rot',
-                icon: 'warning',
-                severity: 'moderate',
-                symptoms: '• Brown circular spots on leaves with black borders\n• Black, shriveled, mummified fruit\n• Dark cankers on stems',
-                cause: 'Caused by Guignardia bidwellii fungus. Requires warm, humid conditions.',
-                treatment: '1. Apply fungicides containing myclobutanil\n2. Remove mummified fruit from vines and ground\n3. Prune for air circulation',
-                prevention: '• Improve air circulation through pruning\n• Remove infected plant parts\n• Use resistant varieties',
-                organicTreatment: '• Apply sulfur or copper fungicides\n• Remove infected clusters immediately',
-                deficiency: 'Not a deficiency. Fungal disease requiring fungicide treatment.',
-                nutrientFix: 'Maintain proper vine nutrition. Balanced NPK with emphasis on potassium for disease resistance.'
-            },
-            
-            // Apple Diseases
-            'Apple - Scab': {
-                title: 'Apple Scab',
-                icon: 'warning',
-                severity: 'moderate',
-                symptoms: '• Olive-green to dark brown velvety spots on leaves\n• Spots on fruit that crack and deform\n• Premature leaf drop',
-                cause: 'Caused by Venturia inaequalis fungus. Favors cool, wet spring weather.',
-                treatment: '1. Apply fungicides at green tip stage\n2. Rake and destroy fallen leaves\n3. Prune for air circulation',
-                prevention: '• Plant resistant varieties (Liberty, Enterprise)\n• Apply preventive fungicides\n• Remove leaf litter in fall',
-                organicTreatment: '• Apply sulfur or lime-sulfur sprays\n• Use compost tea as foliar spray',
-                deficiency: 'Not a deficiency. Fungal disease requiring integrated management.',
-                nutrientFix: 'Maintain balanced tree nutrition. Avoid excess nitrogen which promotes disease susceptibility.'
-            },
-            
-            // Nitrogen Deficiency (General)
-            'Nitrogen Deficiency': {
-                title: 'Nitrogen Deficiency',
-                icon: 'agriculture',
-                severity: 'moderate',
-                symptoms: '• Yellowing of older leaves first\n• Stunted growth\n• Pale green overall color\n• Reduced fruit/vegetable yield',
-                cause: 'Insufficient nitrogen in soil. Can be caused by excessive rain leaching nitrogen, poor soil organic matter, or high carbon materials (sawdust).',
-                treatment: '1. Apply nitrogen-rich fertilizer (blood meal, fish emulsion)\n2. Add composted manure\n3. Plant cover crops (clover, vetch)\n4. Side-dress with organic fertilizer',
-                prevention: '• Regular soil testing\n• Add compost annually\n• Rotate with legumes\n• Use slow-release organic fertilizers',
-                organicTreatment: '• Apply blood meal (12-0-0)\n• Use fish emulsion (5-1-1)\n• Composted chicken manure\n• Coffee grounds around plants',
-                deficiency: '⚠️ THIS IS A NUTRIENT DEFICIENCY! Classic symptom is uniform yellowing of older leaves.',
-                nutrientFix: 'Apply nitrogen-rich fertilizer immediately. Blood meal or fish emulsion for quick results. Compost for long-term soil health.'
-            },
-            
-            // Potassium Deficiency
-            'Potassium Deficiency': {
-                title: 'Potassium Deficiency',
-                icon: 'agriculture',
-                severity: 'moderate',
-                symptoms: '• Yellowing and browning of leaf edges (scorching)\n• Older leaves affected first\n• Weak stems\n• Poor fruit development',
-                cause: 'Insufficient potassium in soil. Common in sandy soils or after heavy rains.',
-                treatment: '1. Apply potassium-rich fertilizer (kelp meal, wood ash)\n2. Use greensand or granite dust\n3. Compost with banana peels\n4. Foliar spray with kelp extract',
-                prevention: '• Regular soil testing\n• Add compost annually\n• Use potassium-rich amendments\n• Mulch to retain nutrients',
-                organicTreatment: '• Apply wood ash (sparingly)\n• Use kelp meal\n• Composted banana peels\n• Greensand (slow release)',
-                deficiency: '⚠️ THIS IS A NUTRIENT DEFICIENCY! Characterized by leaf edge burn (scorching).',
-                nutrientFix: 'Apply potassium sulfate or langbeinite. Wood ash (1 lb per 100 sq ft). Kelp meal for organic option.'
-            },
-            
-            // Magnesium Deficiency
-            'Magnesium Deficiency': {
-                title: 'Magnesium Deficiency',
-                icon: 'agriculture',
-                severity: 'mild',
-                symptoms: '• Yellowing between leaf veins (interveinal chlorosis)\n• Older leaves affected first\n• Leaves may curl upward\n• Purple tint on some plants',
-                cause: 'Insufficient magnesium in soil. Common in acidic or sandy soils. High potassium can compete with magnesium uptake.',
-                treatment: '1. Apply Epsom salts (magnesium sulfate)\n2. Use dolomitic lime if pH is low\n3. Foliar spray with Epsom salt solution\n4. Add compost',
-                prevention: '• Maintain soil pH 6.0-7.0\n• Use dolomitic lime\n• Add compost regularly\n• Avoid excess potassium fertilizers',
-                organicTreatment: '• Dissolve 1 tbsp Epsom salt per gallon water as foliar spray\n• Apply dolomitic lime to soil\n• Use kelp meal',
-                deficiency: '⚠️ THIS IS A NUTRIENT DEFICIENCY! Distinctive yellowing between green veins.',
-                nutrientFix: 'Apply Epsom salts (1 tbsp per gallon water as foliar or 1/4 cup per plant soil application). Dolomitic lime for long-term.'
-            },
-            
-            // Iron Deficiency
-            'Iron Deficiency': {
-                title: 'Iron Deficiency (Iron Chlorosis)',
-                icon: 'agriculture',
-                severity: 'mild',
-                symptoms: '• Yellowing between veins on NEW leaves first\n• Veins remain dark green\n• Leaves may turn almost white\n• Stunted growth',
-                cause: 'Iron deficiency usually caused by high soil pH (alkaline) that locks up iron, not lack of iron in soil.',
-                treatment: '1. Apply chelated iron (Fe-EDDHA for high pH)\n2. Lower soil pH with sulfur\n3. Foliar spray with iron solution\n4. Add compost',
-                prevention: '• Maintain soil pH below 7.0\n• Use iron chelates\n• Add organic matter\n• Avoid over-liming',
-                organicTreatment: '• Apply iron sulfate\n• Use compost (adds chelates)\n• Coffee grounds can help acidify soil',
-                deficiency: '⚠️ THIS IS A NUTRIENT DEFICIENCY! New leaves yellow first - distinguishes from magnesium deficiency.',
-                nutrientFix: 'Apply chelated iron foliar spray. For alkaline soils, use Fe-EDDHA. Lower soil pH with sulfur if needed.'
-            },
-            
-            // Phosphorus Deficiency
-            'Phosphorus Deficiency': {
-                title: 'Phosphorus Deficiency',
-                icon: 'agriculture',
-                severity: 'moderate',
-                symptoms: '• Purple or reddish tint on leaves and stems\n• Stunted growth\n• Poor root development\n• Delayed maturity',
-                cause: 'Insufficient phosphorus in soil. Can be caused by cold soil (phosphorus not available), acidic or alkaline pH extremes.',
-                treatment: '1. Apply bone meal or rock phosphate\n2. Use phosphorus-rich fertilizer\n3. Maintain optimal soil pH (6.0-7.0)\n4. Soil temperature warming',
-                prevention: '• Regular soil testing\n• Add phosphorus amendments before planting\n• Use mycorrhizal fungi to aid uptake\n• Maintain proper pH',
-                organicTreatment: '• Apply bone meal (slow release)\n• Use rock phosphate\n• Composted manure\n• Fish bone meal',
-                deficiency: '⚠️ THIS IS A NUTRIENT DEFICIENCY! Purple coloration is characteristic.',
-                nutrientFix: 'Apply bone meal (2-3 lbs per 100 sq ft). Soft rock phosphate for long-term. Ensure soil pH is optimal for uptake.'
-            }
-        };
-
-        // Function to get disease info from database
-        function getDiseaseInfo(prediction) {
-            // Try exact match first
-            if (diseaseDatabase[prediction]) {
-                return diseaseDatabase[prediction];
-            }
-            
-            // Try partial match
-            for (const [key, info] of Object.entries(diseaseDatabase)) {
-                if (prediction.toLowerCase().includes(key.toLowerCase()) || 
-                    key.toLowerCase().includes(prediction.toLowerCase())) {
-                    return info;
-                }
-            }
-            
-            // Check if it's a healthy plant
-            if (prediction.toLowerCase().includes('healthy')) {
-                return diseaseDatabase['Tomato - Healthy'];
-            }
-            
-            // Check for deficiency keywords
-            if (prediction.toLowerCase().includes('deficiency')) {
-                if (prediction.toLowerCase().includes('nitrogen')) return diseaseDatabase['Nitrogen Deficiency'];
-                if (prediction.toLowerCase().includes('potassium')) return diseaseDatabase['Potassium Deficiency'];
-                if (prediction.toLowerCase().includes('magnesium')) return diseaseDatabase['Magnesium Deficiency'];
-                if (prediction.toLowerCase().includes('iron')) return diseaseDatabase['Iron Deficiency'];
-                if (prediction.toLowerCase().includes('phosphorus')) return diseaseDatabase['Phosphorus Deficiency'];
-            }
-            
-            // Default return
-            return {
-                title: prediction,
-                icon: 'science',
-                severity: 'mild',
-                symptoms: '• Visual symptoms detected on leaves or fruit\n• Discoloration or spots present\n• Abnormal growth patterns observed',
-                cause: 'May be caused by fungal, bacterial, or viral infection. Environmental stress or nutrient deficiency could also be factors.',
-                treatment: '1. Remove affected plant parts\n2. Improve air circulation\n3. Avoid overhead watering\n4. Apply appropriate fungicide if needed',
-                prevention: '• Practice crop rotation\n• Use disease-resistant varieties\n• Maintain proper plant nutrition\n• Regular monitoring',
-                organicTreatment: 'Apply neem oil or copper-based organic fungicides. Remove and destroy infected material.',
-                deficiency: 'Nutrient levels should be tested if symptoms persist. Consider balanced fertilization.',
-                nutrientFix: 'Test soil before applying fertilizers. Use compost to improve overall soil health.'
-            };
-        }
-
-        // Load and display results
         const scanData = JSON.parse(localStorage.getItem('lastScanResult') || '{}');
         
+        function getSeverityClass(severity) {
+            if (severity === 'Critical') return 'severity-critical';
+            if (severity === 'High') return 'severity-high';
+            if (severity === 'Moderate') return 'severity-moderate';
+            return 'severity-good';
+        }
+        
         if (scanData.success) {
-            const diseaseInfo = getDiseaseInfo(scanData.prediction);
-            const severityClass = diseaseInfo.severity === 'critical' ? 'severity-critical' : 
-                                  (diseaseInfo.severity === 'moderate' ? 'severity-moderate' : 'severity-mild');
-            const iconName = diseaseInfo.icon || 'science';
+            const severityClass = getSeverityClass(scanData.severity);
+            const confidencePercent = Math.round(scanData.confidence * 100);
             
             document.getElementById('resultContent').innerHTML = `
                 <!-- Main Diagnosis Card -->
                 <div class="text-center mb-6">
                     <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                        <span class="material-symbols-outlined text-5xl text-emerald-600">${iconName}</span>
+                        <span class="material-symbols-outlined text-5xl text-emerald-600">eco</span>
                     </div>
                     <h2 class="text-2xl font-bold mt-3 text-gray-800">${scanData.prediction}</h2>
                     <div class="inline-flex items-center gap-1 bg-emerald-100 px-3 py-1 rounded-full mt-2">
                         <span class="material-symbols-outlined text-emerald-600 text-sm">verified</span>
-                        <p class="text-emerald-600 font-semibold text-sm">${Math.round(scanData.confidence * 100)}% Confidence</p>
+                        <p class="text-emerald-600 font-semibold text-sm">${confidencePercent}% Confidence</p>
                     </div>
                 </div>
                 
@@ -353,7 +92,7 @@
                 <div class="mb-4 p-3 rounded-xl ${severityClass} border-l-4">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-lg">priority_high</span>
-                        <span class="font-semibold">Severity: ${diseaseInfo.severity.toUpperCase()}</span>
+                        <span class="font-semibold">Severity: ${scanData.severity}</span>
                     </div>
                 </div>
                 
@@ -363,7 +102,7 @@
                         <span class="material-symbols-outlined text-emerald-600">symptoms</span>
                         📋 Symptoms
                     </h3>
-                    <div class="text-gray-600 text-sm whitespace-pre-line">${diseaseInfo.symptoms}</div>
+                    <p class="text-gray-600 text-sm">${scanData.disease_info?.symptoms || 'Visual symptoms detected on leaves. Discoloration or spots present.'}</p>
                 </div>
                 
                 <!-- Cause Section -->
@@ -372,7 +111,7 @@
                         <span class="material-symbols-outlined text-red-600">warning</span>
                         ⚠️ Cause
                     </h3>
-                    <p class="text-gray-600 text-sm">${diseaseInfo.cause}</p>
+                    <p class="text-gray-600 text-sm">${scanData.disease_info?.cause || 'Could be caused by fungal, bacterial, or viral infection.'}</p>
                 </div>
                 
                 <!-- Treatment Section -->
@@ -381,7 +120,7 @@
                         <span class="material-symbols-outlined text-amber-600">medication</span>
                         💊 Treatment
                     </h3>
-                    <div class="text-gray-600 text-sm whitespace-pre-line">${diseaseInfo.treatment}</div>
+                    <p class="text-gray-600 text-sm">${scanData.disease_info?.treatment || 'Remove affected parts. Apply appropriate treatment.'}</p>
                 </div>
                 
                 <!-- Prevention Section -->
@@ -390,28 +129,42 @@
                         <span class="material-symbols-outlined text-green-600">grass</span>
                         🌱 Prevention
                     </h3>
-                    <div class="text-gray-600 text-sm whitespace-pre-line">${diseaseInfo.prevention}</div>
+                    <p class="text-gray-600 text-sm">${scanData.disease_info?.prevention || 'Practice crop rotation. Maintain proper spacing.'}</p>
                 </div>
                 
-                <!-- Organic Treatment Section -->
+                <!-- Organic Treatment -->
                 <div class="bg-emerald-50 rounded-xl p-4 mb-4">
                     <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-700">
                         <span class="material-symbols-outlined text-emerald-600">eco</span>
                         🌿 Organic Treatment
                     </h3>
-                    <p class="text-gray-600 text-sm">${diseaseInfo.organicTreatment}</p>
+                    <p class="text-gray-600 text-sm">${scanData.disease_info?.organic_treatment || 'Apply neem oil or copper-based fungicide.'}</p>
                 </div>
                 
-                <!-- Deficiency Information Section (Important!) -->
+                <!-- Nutrient Deficiency Section -->
                 <div class="bg-purple-50 rounded-xl p-4 mb-4 border-l-4 border-purple-500">
                     <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-700">
                         <span class="material-symbols-outlined text-purple-600">science</span>
-                        🧪 Nutrient Deficiency Analysis
+                        🧪 Nutrient Analysis
                     </h3>
-                    <p class="text-gray-700 text-sm font-medium mb-2">${diseaseInfo.deficiency}</p>
+                    <p class="text-gray-700 text-sm font-medium mb-2">${scanData.disease_info?.deficiency || 'Consider soil testing for accurate diagnosis.'}</p>
                     <div class="bg-purple-100 rounded-lg p-3 mt-2">
-                        <p class="text-sm text-gray-700"><span class="font-bold">💡 Nutrient Fix:</span> ${diseaseInfo.nutrientFix}</p>
+                        <p class="text-sm text-gray-700"><span class="font-bold">💡 Recommendation:</span> ${scanData.disease_info?.nutrientFix || 'Apply balanced NPK fertilizer.'}</p>
                     </div>
+                </div>
+                
+                <!-- Top 3 Predictions -->
+                <div class="bg-blue-50 rounded-xl p-4 mb-4">
+                    <h3 class="font-bold mb-3 flex items-center gap-2 text-gray-700">
+                        <span class="material-symbols-outlined text-blue-600">show_chart</span>
+                        🏆 Top Alternative Diagnoses
+                    </h3>
+                    ${scanData.top3 ? scanData.top3.slice(1).map(pred => `
+                        <div class="flex justify-between items-center py-2 border-b border-blue-100 last:border-0">
+                            <span class="text-sm text-gray-700">${pred.name}</span>
+                            <span class="text-sm font-semibold text-blue-600">${Math.round(pred.confidence * 100)}%</span>
+                        </div>
+                    `).join('') : '<p class="text-sm text-gray-500">No alternative diagnoses available</p>'}
                 </div>
                 
                 <!-- Action Buttons -->
