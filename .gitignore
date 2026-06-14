@@ -1,2 +1,142 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
-*
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+
+# Flask
+instance/
+.webassets-cache
+
+# Uploaded files - IMPORTANT: Don't upload user images
+uploads/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+uploads/*
+
+# Model files (large files)
+*.pth
+*.pt
+*.pkl
+*.h5
+*.hdf5
+*.onnx
+best_cnn.pth
+
+# Environment variables
+.env
+.env.local
+.env.production
+.flaskenv
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.suo
+*.user
+*.sln
+*.csproj
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+.ipynb_checkpoints-*
+
+# Logs
+*.log
+logs/
+log.txt
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+share/python-wheels/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+.env/
+virtualenv/
+
+# OS files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# Project specific
+test_images/
+temp_uploads/
+*.pyc
+*.pyo
+
+# Requirements (lock files if you use them)
+requirements.lock
+Pipfile.lock
+poetry.lock
+
+# Coverage reports
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Debug logs
+debug.log
+error.log
+access.log
+
+# Secrets
+.secrets
+secrets.json
+config.json
+credentials.json
+
+# Node modules (if any frontend tools)
+node_modules/
+package-lock.json
+
+# Static files (if generated)
+static/generated/
+static/dist/
+
+# Cache
+.cache/
+.cache_*
