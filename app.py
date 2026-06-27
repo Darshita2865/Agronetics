@@ -14,8 +14,6 @@ import random
 app = Flask(__name__)
 app.secret_key = 'agronetics_secret_key_2024'
 
-# FIX: Use /tmp/uploads on Render (writable directory)
-# For local development, it will use local uploads folder
 if os.environ.get('RENDER'):
     UPLOAD_FOLDER = '/tmp/uploads'
 else:
